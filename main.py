@@ -8,7 +8,7 @@ if __name__ == "__main__":
     collection_helper = CollectionHelper(config.MONGODB_DATABASE_NAME, config.MONGODB_COLLECTION_NAME)
 
     courses = []
-    for subject in get_subjects(request_helper, config.QUARTER_UNDERGRAD_EXTENSION):
+    for subject in get_subjects(request_helper, config.QUARTER_GRAD_EXTENSION):
         courses.extend(get_courses(request_helper, subject))
 
     collection_helper.publish(courses)

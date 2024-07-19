@@ -1,7 +1,6 @@
 import config
 from builders import ModelBuilder
 from helpers.RequestHelper import RequestHelper
-from models.RequisiteType import RequisiteType
 
 LEVEL = "grad"
 PREREQUISITE = "Prerequisite"
@@ -56,10 +55,10 @@ def get_courses(request_helper: RequestHelper, extension: str) -> list:
         description = course.find("p", { "class": "courseblockdesc" }).text.strip()
 
         prereqs_parent = course.find("b", text=lambda text: text.startswith(PREREQUISITE))
-        prerequisites = ModelBuilder.build_requisite(RequisiteType.Prerequisite, str(prereqs_parent.find_next_sibling(text=True)).strip()) if prereqs_parent is not None else None
+        prerequisites = ModelBuilder.build_requisite(str(prereqs_parent.find_next_sibling(text=True)).strip()) if prereqs_parent is not None else None
 
         coreqs_parent = course.find("b", text=lambda text: text.startswith(COREQUISITE))
-        corequisites = ModelBuilder.build_requisite(RequisiteType.Corequisite, str(coreqs_parent.find_next_sibling(text=True)).strip().removeprefix(": ")) if coreqs_parent is not None else None
+        corequisites = ModelBuilder.build_requisite(str(coreqs_parent.find_next_sibling(text=True)).strip().removeprefix(": ")) if coreqs_parent is not None else None
 
         courses.append(ModelBuilder.build_course(subject, number, title, credits, description, prerequisites, corequisites))
     return courses

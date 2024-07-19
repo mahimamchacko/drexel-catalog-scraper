@@ -1,5 +1,6 @@
+import time
 from bs4 import BeautifulSoup
-from requests import Session, Response
+from requests import exceptions, Session, Response
 
 class RequestHelper():
     """
@@ -27,8 +28,13 @@ class RequestHelper():
         :type link: str
         :rtype: requests.Response
         """
-        
-        return self.session.get(link)
+
+        try:
+            response = self.session.get(link)
+            return response
+        except exceptions.ConnectionError:
+            time.sleep(60)
+            return self.__get(link)
 
     def __del__(self):
         self.session.close()
