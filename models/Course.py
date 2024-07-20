@@ -42,7 +42,7 @@ class Course(Serializable):
         :rtype: str
         """
 
-        return dictionary["tag"]
+        return { "tag" : dictionary["tag"] }
 
     @staticmethod
     def equals(dict1: dict, dict2: dict) -> bool:

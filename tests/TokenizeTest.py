@@ -231,11 +231,11 @@ class TokenizeTest(unittest.TestCase):
     def test_start_and_operation(self):
         requisite = "and BIO 122 [Min Grade: D] and BIO 141 [Min Grade: D] and BIO 131 [Min Grade: D]"
         tokens = [
-            build_token("and", TokenType.OrOperation),
+            build_token("and", TokenType.AndOperation),
             build_token("BIO 122", TokenType.Course),
-            build_token("and", TokenType.OrOperation),
+            build_token("and", TokenType.AndOperation),
             build_token("BIO 141", TokenType.Course),
-            build_token("and", TokenType.OrOperation),
+            build_token("and", TokenType.AndOperation),
             build_token("BIO 131", TokenType.Course)
         ]
         self.assertEqual(tokens, tokenize(requisite))
