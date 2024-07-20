@@ -7,8 +7,8 @@ class Requisite(Serializable):
     """
 
     def __init__(self, operation: str) -> None:
-        self.tags: list[Tag] = []
         self.operation: str = operation
+        self.tags: set[Tag] = set()
     
     def get_operation(self) -> str:
         """
@@ -32,4 +32,12 @@ class Requisite(Serializable):
         :param tag: Tag to add to the requisite
         """
 
-        self.tags.append(tag)
+        self.tags.add(tag)
+    
+    def __hash__(self) -> int:
+        return hash((self.operation, frozenset(self.tags)))
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(self, value.__class__):
+            return self.operation == value.operation and self.tags == value.tags
+        return False

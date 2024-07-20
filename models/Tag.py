@@ -24,3 +24,11 @@ class Tag(Serializable):
         """
 
         return self.number
+
+    def __hash__(self) -> int:
+        return hash((self.subject, self.number))
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(self, value.__class__):
+            return self.subject == value.subject and self.number == value.number
+        return False

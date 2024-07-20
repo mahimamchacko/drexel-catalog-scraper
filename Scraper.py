@@ -1,5 +1,5 @@
-import config
-from builders import ModelBuilder
+import config, re
+from builders import ModelBuilder, RequisiteBuilder
 from helpers.RequestHelper import RequestHelper
 
 LEVEL = "grad"
@@ -48,17 +48,17 @@ def get_courses(request_helper: RequestHelper, extension: str) -> list:
         header = course.find("p", { "class": "courseblocktitle" }).contents[0].contents
         label = header[0].text.strip().split("\xa0")
         subject = label[0]
-        number = label[1].removesuffix(" [WI]")
+        number = re.sub(" \[WI\]", "", label[1]).strip()
         title = header[1].text.strip()
         credits = header[2].strip()
         
         description = course.find("p", { "class": "courseblockdesc" }).text.strip()
 
         prereqs_parent = course.find("b", text=lambda text: text.startswith(PREREQUISITE))
-        prerequisites = ModelBuilder.build_requisite(str(prereqs_parent.find_next_sibling(text=True)).strip()) if prereqs_parent is not None else None
+        prerequisites = RequisiteBuilder.build(str(prereqs_parent.find_next_sibling(text=True)).strip()) if prereqs_parent is not None else None
 
         coreqs_parent = course.find("b", text=lambda text: text.startswith(COREQUISITE))
-        corequisites = ModelBuilder.build_requisite(str(coreqs_parent.find_next_sibling(text=True)).strip().removeprefix(": ")) if coreqs_parent is not None else None
+        corequisites = RequisiteBuilder.build(str(coreqs_parent.find_next_sibling(text=True)).strip().removeprefix(": ")) if coreqs_parent is not None else None
 
         courses.append(ModelBuilder.build_course(subject, number, title, credits, description, prerequisites, corequisites))
     return courses

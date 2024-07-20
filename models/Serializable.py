@@ -1,5 +1,5 @@
 import json
-from helpers.ComplexEncoder import ComplexEncoder
+from encoders.ComplexEncoder import ComplexEncoder
 
 class Serializable:
     """
@@ -24,7 +24,7 @@ class Serializable:
         for key, value in dictionary.items():
             if isinstance(value, Serializable):
                 dictionary[key] = value.toDictionary()
-            elif type(value) is list and any([isinstance(subvalue, Serializable) for subvalue in value]):
+            elif (type(value) is list or type(value) is set) and any([isinstance(subvalue, Serializable) for subvalue in value]):
                 sublist = []
                 for subvalue in value:
                     if isinstance(subvalue, Serializable):
